@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="XamarinBeer.MainPage">
+
+    <Grid BackgroundColor="WhiteSmoke">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="132" />
+            </Grid.RowDefinitions>
+
+            <Image x:Name="CurrentImage" 
+               Source="{Binding CurrentImageSource}"
+               HorizontalOptions="CenterAndExpand"
+               />
+
+            <Grid VerticalOptions="Start">
+                <Label Text="{Binding Description}"
+                       d:Text="Description"
+                       TextColor="White"
+                       BackgroundColor="Accent"
+                       LineBreakMode="WordWrap"
+                       HorizontalTextAlignment="Center"
+                       Margin="12"
+                       Opacity="0.8"
+                />
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="80" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Entry Text="{Binding BeerId}"
+                   d:Text="3942"
+                   BackgroundColor="White"
+                   Keyboard="Numeric"
+                   VerticalOptions="Start"
+                   HorizontalTextAlignment="End"
+                />
+                <Button Text="Register new beer!" 
+                        Grid.Row="1"
+                        Command="{Binding AddBeerImageCommand}"
+                />
+                <Button Text="Detect awesome beer!" 
+                        Grid.Row="1" Grid.Column="1"
+                        Command="{Binding PredictBeerCommand}"
+                />
+            </Grid>
+        </Grid>
+    </Grid>
+</ContentPage>
