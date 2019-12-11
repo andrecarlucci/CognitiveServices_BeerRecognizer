@@ -42,7 +42,10 @@ namespace Untappd
         public async Task<Beer> GetBeer(int beerId)
         {
             var methodName = $"beer/info/{beerId}";
-            var url = String.Format(_baseUrl, methodName, ClientId, ClientSecret);
+            var url = String.Format(_baseUrl, 
+                                    methodName, 
+                                    ClientId, 
+                                    ClientSecret);
             var result = await _client.GetStringAsync(url);
             return JsonConvert.DeserializeObject<GetBeerRoot>(result).Response.Beer;
         }

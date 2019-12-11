@@ -59,6 +59,17 @@ namespace XamarinBeer
             }
         });
 
+        public ICommand TrainTheNetworkCommand => new Command(async () => {
+            try
+            {
+                await TrainTheNetwork();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+        });
+
         private ImageSource _imageSource;
         public ImageSource CurrentImageSource {
             get => _imageSource;
@@ -77,7 +88,7 @@ namespace XamarinBeer
             }
         }
 
-        private string _beerId = "4128";
+        private string _beerId = "";
         public string BeerId {
             get => _beerId;
             set {
@@ -178,10 +189,28 @@ namespace XamarinBeer
             await _speechService.SpeakTextAsync(Description);
         }
 
+        public async Task TrainTheNetwork()
+        {
+            if (!await Confirm())
+            {
+                return;
+            }            
+            Description = "Training the network...";
+            var iterationId = await _trainingClient.TrainModel();
+            Description = "Publishing the iteration...";
+            await _trainingClient.PublishIteration(iterationId, iterationId.ToString());
+            Description = "Training Done!";
+        }
+
 
         private void RaisePropertyChanged(string property)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+        }
+
+        private async Task<bool> Confirm()
+        {
+            return await Application.Current.MainPage.DisplayAlert("", "Are you sure?", "OK", "Cancel");
         }
     }
 }

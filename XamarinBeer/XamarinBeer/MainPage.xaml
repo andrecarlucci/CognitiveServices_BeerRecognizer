@@ -29,7 +29,7 @@
                        Opacity="0.8"
                 />
             </Grid>
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1" CascadeInputTransparent="True">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition Height="80" />
@@ -37,21 +37,36 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
+                <Grid BackgroundColor="White">
+                    <Label Text="Beer Code:"
+                       VerticalTextAlignment="End"
+                       Margin="6, 6, 14, 10"
+                       TextColor="Black"
+                       FontSize="Medium"
+                       />
+                </Grid>
+                
                 <Entry Text="{Binding BeerId}"
                    d:Text="3942"
                    BackgroundColor="White"
                    Keyboard="Numeric"
                    VerticalOptions="Start"
                    HorizontalTextAlignment="End"
+                   Grid.Column="1"
                 />
                 <Button Text="Register new beer!" 
                         Grid.Row="1"
                         Command="{Binding AddBeerImageCommand}"
                 />
-                <Button Text="Detect awesome beer!" 
+                <Button Text="Train the network!" 
                         Grid.Row="1" Grid.Column="1"
+                        Command="{Binding TrainTheNetworkCommand}"
+                />
+                <Button Text="Detect awesome beer!" 
+                        Grid.Row="1" Grid.Column="2"
                         Command="{Binding PredictBeerCommand}"
                 />
             </Grid>

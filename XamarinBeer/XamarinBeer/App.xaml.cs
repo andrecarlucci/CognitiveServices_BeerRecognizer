@@ -1,4 +1,6 @@
+using Newtonsoft.Json;
 using System;
+using System.IO;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -9,7 +11,6 @@ namespace XamarinBeer
         public App()
         {
             InitializeComponent();
-
             MainPage = new MainPage();
         }
 
