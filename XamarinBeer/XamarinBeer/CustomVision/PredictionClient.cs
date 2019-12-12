@@ -21,10 +21,7 @@ namespace XamarinBeer.CustomVision
 
         public async Task<int> Predict(Stream image, string model)
         {
-            var result = await _client.ClassifyImageAsync(Config.AwesomeBeerProjectId, model, image);
-            var tag = result.Predictions.OrderByDescending(x => x.Probability)
-                                        .FirstOrDefault()?.TagName ?? "0";
-            return Convert.ToInt32(tag);
+            return 5;
         }
     }
 }

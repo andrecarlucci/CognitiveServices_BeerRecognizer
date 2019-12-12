@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace Untappd.Models
 {
@@ -18,5 +19,19 @@ namespace Untappd.Models
         public int rating_count { get; set; }
         [JsonProperty(PropertyName = "rating_score")]
         public decimal RatingScore { get; set; }
+
+        public string GetCustomDescription()
+        {
+            if(Bid == 0)
+            {
+                return "Beer not found";
+            }
+            var desc = $"This is a {BeerName}, rating of {RatingScore:0.0} .";
+            if (RatingScore > 3.5m)
+            {
+                desc += Environment.NewLine + "This beer is awesome!";
+            }
+            return desc;
+        }
     }
 }

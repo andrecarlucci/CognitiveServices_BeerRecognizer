@@ -35,6 +35,8 @@ namespace XamarinBeer
             _trainingClient = new TrainingClient();
             _untappdClient = new UntappdClient(new HttpClient(), Config.UntappdClientId, Config.UntappdSecret);
             _speechService = new SpeechService();
+
+            CrossMedia.Current.Initialize().Wait();
         }
 
         public ICommand PredictBeerCommand => new Command(async () => {
@@ -119,13 +121,14 @@ namespace XamarinBeer
         {
             _imageInBytes = null;
             CurrentImageSource = null;
-            await CrossMedia.Current.Initialize();
-
+            
             var file = await CrossMedia.Current.TakePhotoAsync(
                 new StoreCameraMediaOptions
                 {
                     SaveToAlbum = false,
-                    PhotoSize = PhotoSize.Medium
+                    PhotoSize = PhotoSize.Medium,
+                    DefaultCamera = CameraDevice.Rear,
+                    CompressionQuality = 92
                 }
             );
             if (file == null)
@@ -147,18 +150,10 @@ namespace XamarinBeer
         {
             var model = await _trainingClient.GetLatestModel();
             var beerId = await _predictionClient.Predict(new MemoryStream(_imageInBytes), model);
-            if(beerId == 0)
-            {
-                Description = "Beer not found";
-                return;
-            }
-            BeerId = beerId + "";
             var beer = await _untappdClient.GetBeer(beerId);
-            Description = $"This is a {beer.BeerName}, rating of {beer.RatingScore:0.0} .";
-            if(beer.RatingScore > 3.5m)
-            {
-                Description += Environment.NewLine + "This beer is awesome!";
-            }
+            
+            BeerId = beerId.ToString();
+            Description = beer.GetCustomDescription();
         }
 
         private async Task AddThisBeerImage()
@@ -212,5 +207,19 @@ namespace XamarinBeer
         {
             return await Application.Current.MainPage.DisplayAlert("", "Are you sure?", "OK", "Cancel");
         }
+
+        public ICommand PredictBeerCommand2 => new Command(async () => {            
+            Description = "Recognizing beer...";
+            await TakeAPicture();
+            if(_imageInBytes == null)
+            {
+                Description = "";
+                return;
+            }
+            SetBackground();
+            Description = "Warning! This is a Heineken. This beer is not allowed in this country. Security was notified!";
+            await SayItLoud();
+        });
+
     }
 }
